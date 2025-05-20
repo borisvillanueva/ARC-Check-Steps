@@ -27,7 +27,7 @@ steps = [
     "Run `./arc_commit_editable_files.sh` again",
     "Run `pyx packages/arc/src/post_processing/clean_arc_pairs.py` and select `Clean ALL`",
     "Run `./arc_commit_generated_files.sh`",
-    "Copy the PR link and send it to Pritam"
+    "Click on the the PR link and create a Pull Request"
 ]
 
 # Initialize session state
