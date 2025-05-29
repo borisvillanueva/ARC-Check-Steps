@@ -1,4 +1,5 @@
 import streamlit as st
+import re
 
 st.set_page_config(page_title="CX Asset Onboarding Checklist", layout="centered")
 st.title("✅ CX Utilities - Asset Onboarding Checklist")
@@ -29,25 +30,23 @@ steps = [
     "Click on the the PR link and create a Pull Request"
 ]
 
-# Extract code commands from step text
 def extract_command(step):
-    import re
-    matches = re.findall(r'`([^`]+)`', step)
-    return matches if matches else []
+    return re.findall(r'`([^`]+)`', step)
 
 # Initialize session state
 if "progress" not in st.session_state:
     st.session_state.progress = [False] * len(steps)
 
-st.markdown("#### Click each box to unlock the next step:")
+st.markdown("#### Click each box to mark the step as completed. Commands will hide once marked:")
 
-# Display the steps with checkboxes and command blocks
 for i, step in enumerate(steps):
     enabled = i == 0 or st.session_state.progress[i - 1]
+
+    # Only allow interaction if enabled
     st.session_state.progress[i] = st.checkbox(step, key=i, value=st.session_state.progress[i], disabled=not enabled)
 
-    # Show code block only if this step is checked and has a command
-    if st.session_state.progress[i]:
+    # Show command(s) if step is enabled but not yet completed
+    if enabled and not st.session_state.progress[i]:
         commands = extract_command(step)
         for cmd in commands:
             st.code(cmd, language="bash")
@@ -55,4 +54,3 @@ for i, step in enumerate(steps):
 # Final message
 if all(st.session_state.progress):
     st.success("🎉 All steps completed! Great job, Boris!")
-
