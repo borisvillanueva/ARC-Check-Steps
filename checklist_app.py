@@ -1,4 +1,5 @@
 import streamlit as st
+import re
 
 st.set_page_config(page_title="CX Asset Onboarding Checklist", layout="centered")
 
@@ -27,18 +28,27 @@ steps = [
     "Create the Pull Request 🎉"
 ]
 
+def extract_command(step):
+    return re.findall(r'`([^`]+)`', step)
+
 # Initialize session state
 if "progress" not in st.session_state:
     st.session_state.progress = [False] * len(steps)
 
-st.markdown("#### Click each box to unlock the next step:")
+st.markdown("#### Click each box to mark the step as completed. Commands will hide once marked:")
 
 # Display the steps with progressive checkboxes
 for i, step in enumerate(steps):
-    if i == 0 or st.session_state.progress[i - 1]:
-        st.session_state.progress[i] = st.checkbox(step, key=i, value=st.session_state.progress[i])
-    else:
-        st.checkbox(step, key=i, value=False, disabled=True)
+    enabled = i == 0 or st.session_state.progress[i - 1]
+
+    # Only allow interaction if enabled
+    st.session_state.progress[i] = st.checkbox(step, key=i, value=st.session_state.progress[i], disabled=not enabled)
+
+    # Show command(s) if step is enabled but not yet completed
+    if enabled and not st.session_state.progress[i]:
+        commands = extract_command(step)
+        for cmd in commands:
+            st.code(cmd, language="bash")
 
 # Completion message
 if all(st.session_state.progress):
