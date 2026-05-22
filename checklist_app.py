@@ -136,9 +136,10 @@ steps = [
     "Enter to Default to JSON Format",
     "Verify a new branch was created with the current date using `git branch`",
     "Proceed with `pyx packages/arc/core/add_new_assets.py`",
-    "Select `cx-production-24188796600` and click OK",
     'Select "All Non-restricted Exchanges" box from the Exchange selection screen',
     "After review, run `pyx packages/arc_admin_app/src/launch.py`",
+    "Be Sure Docker Desktop is open on the background"
+    "After new assets for review included, run `./scripts/start_admin_app.sh`",
     "In your browser, go to `http://0.0.0.0:10450/review-asset` and click on the red **Review Assets** button",
     "If there are **0 (zero)** assets to review, run `./scripts/arc_commit_editable_files.sh`",
     "After reviewing assets, click on the **Errors Page** and then **Find Error** button",
